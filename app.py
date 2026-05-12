@@ -48,7 +48,7 @@ p, label, div {
 }
 
 [data-testid="stSidebar"] {
-    background-color: #111827;
+    background-color:  #6487A3;
 }
 
 .stDataFrame {
