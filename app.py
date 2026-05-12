@@ -1,514 +1,340 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.express as px
+import plotly.graph_objects as go
 
-# =====================================================
-# KONFIGURASI HALAMAN
-# =====================================================
+# =====================================
+# PAGE CONFIG
+# =====================================
 st.set_page_config(
     page_title="GiziKu Dashboard",
     page_icon="🥗",
     layout="wide"
 )
 
-# =====================================================
+# =====================================
 # CUSTOM CSS
-# =====================================================
+# =====================================
 st.markdown("""
 <style>
 
-.main {
-    background-color: #0f172a;
-}
-
-.block-container {
-    padding-top: 2rem;
-}
-
-h1, h2, h3, h4 {
-    color: white;
-}
-
-p, label, div {
-    color: white;
-}
-
-[data-testid="stMetric"] {
-    background: linear-gradient(135deg, #1e293b, #334155);
-    padding: 20px;
-    border-radius: 15px;
-    border: 1px solid #334155;
-    text-align: center;
-}
-
-[data-testid="stMetricValue"] {
-    color: #38bdf8;
-    font-size: 35px;
+[data-testid="stAppViewContainer"] {
+    background-color: #111827;
 }
 
 [data-testid="stSidebar"] {
-    background-color:  #6487A3;
+    background-color: #6487A3;
 }
 
-.stDataFrame {
-    border-radius: 10px;
+h1, h2, h3, h4, h5, h6, p, label, div {
+    color: white;
+}
+
+.stMetric {
+    background-color: #1F2937;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #374151;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# =====================================================
-# TITLE
-# =====================================================
-st.title("🥗 GiziKu Dashboard")
-st.caption("Dashboard Pemantauan Gizi Real-time Berbasis Data")
-
-st.markdown("---")
-
-# =====================================================
+# =====================================
 # LOAD DATA
-# =====================================================
+# =====================================
+
 @st.cache_data
 def load_data():
+    df = pd.read_csv("data/dataset_gizi_final.csv")
 
-    # =========================
-    # LOAD CSV
-    # =========================
-    df_gizi = pd.read_csv("data/dataset_gizi_final.csv")
-    df_akg = pd.read_csv("data/dataset_akg_final.csv")
-    df_rekom = pd.read_csv("data/dataset_rekomendasi_final.csv")
+    # UBAH KOLOM MENJADI NUMERIK
+    df['energy_kcal'] = pd.to_numeric(df['energy_kcal'], errors='coerce')
+    df['protein_g'] = pd.to_numeric(df['protein_g'], errors='coerce')
+    df['fat_g'] = pd.to_numeric(df['fat_g'], errors='coerce')
+    df['carbohydrate_g'] = pd.to_numeric(df['carbohydrate_g'], errors='coerce')
 
-    # =========================
-    # FIX TIPE DATA NUMERIK
-    # =========================
-    kolom_gizi = [
-        'energy_kcal',
-        'protein_g',
-        'fat_g',
-        'carbohydrate_g',
-        'sugar_g'
-    ]
+    return df
 
-    for col in kolom_gizi:
-        if col in df_gizi.columns:
-            df_gizi[col] = pd.to_numeric(df_gizi[col], errors='coerce')
-
-    # Dataset AKG
-    for col in df_akg.columns:
-        try:
-            df_akg[col] = pd.to_numeric(df_akg[col])
-        except:
-            pass
-
-    # Dataset rekomendasi
-    for col in df_rekom.columns:
-        try:
-            df_rekom[col] = pd.to_numeric(df_rekom[col])
-        except:
-            pass
-
-    return df_gizi, df_akg, df_rekom
-
-
-# =====================================================
-# TRY LOAD DATA
-# =====================================================
 try:
-    df_gizi, df_akg, df_rekom = load_data()
-    st.sidebar.success("✅ Semua dataset berhasil dimuat")
+    df = load_data()
+    st.sidebar.success("✅ Dataset berhasil dimuat")
 
-except Exception as e:
-    st.error(f"❌ ERROR LOAD DATA: {e}")
-    st.stop()
+except:
+    st.error("❌ Dataset gagal dimuat")
 
-# =====================================================
-# SIDEBAR
-# =====================================================
-st.sidebar.title("📌 Menu Dashboard")
+# =====================================
+# SIDEBAR MENU
+# =====================================
 
-menu = st.sidebar.radio(
-    "Pilih Halaman",
-    [
-        "🏠 Overview",
-        "📊 Distribusi Kandungan Gizi Makanan",
-        "🍽️ Pemenuhan Angka Kecukupan Gizi (AKG)",
-        "👥 Perbandingan Kebutuhan Gizi",
-        "⚖️ Kesenjangan Nutrisi",
-        "🩺 Pola Hubungan Nutrisi & Kondisi Medis"
-    ]
-)
+st.sidebar.markdown("""
+<h1 style='text-align: center; color: white;'>
+🥗 GiziKu
+</h1>
+""", unsafe_allow_html=True)
 
-# =====================================================
-# OVERVIEW
-# =====================================================
-if menu == "🏠 Overview":
+st.sidebar.markdown("### 📌 Navigasi")
 
-    st.header("📌 Ringkasan Dataset")
+if "menu" not in st.session_state:
+    st.session_state.menu = "🏠 Dashboard Utama"
 
-    # =========================================
-    # METRIC CARD
-    # =========================================
+# BUTTON MENU
+if st.sidebar.button("🏠 Dashboard Utama", use_container_width=True):
+    st.session_state.menu = "🏠 Dashboard Utama"
+
+if st.sidebar.button("🥗 Kandungan Gizi", use_container_width=True):
+    st.session_state.menu = "🥗 Kandungan Gizi Makanan"
+
+if st.sidebar.button("📈 Analisis Gizi", use_container_width=True):
+    st.session_state.menu = "📈 Analisis Kebutuhan Gizi"
+
+if st.sidebar.button("💡 Insight & Rekomendasi", use_container_width=True):
+    st.session_state.menu = "💡 Insight & Rekomendasi"
+
+menu = st.session_state.menu
+
+st.sidebar.divider()
+
+st.sidebar.info("""
+✨ Dashboard interaktif untuk membantu memahami
+kandungan gizi dan pola makan sehat.
+""")
+
+# =====================================
+# CUSTOM CSS
+# =====================================
+st.markdown("""
+<style>
+
+[data-testid="stAppViewContainer"] {
+    background-color: #111827;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #6487A3;
+}
+
+h1, h2, h3, h4, h5, h6, p, label, div {
+    color: white;
+}
+
+.stMetric {
+    background-color: #1F2937;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #374151;
+}
+
+/* BUTTON SIDEBAR */
+.stButton > button {
+    background-color: #4B6B88;
+    color: white;
+    border-radius: 12px;
+    height: 50px;
+    border: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.stButton > button:hover {
+    background-color: #7DA2C3;
+    transform: scale(1.03);
+    box-shadow: 0px 0px 10px rgba(255,255,255,0.3);
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# =====================================
+# DASHBOARD UTAMA
+# =====================================
+if menu == "🏠 Dashboard Utama":
+
+    st.title("🥗 GiziKu Dashboard")
+    st.write("Dashboard pemantauan gizi makanan berbasis data interaktif")
+
+    st.info("""
+    Dashboard ini membantu pengguna memahami kandungan nutrisi makanan,
+    kebutuhan gizi harian, dan rekomendasi pola makan sehat.
+    """)
+
+    # METRICS
     col1, col2, col3 = st.columns(3)
 
     with col1:
         st.metric(
-            "Jumlah Data Gizi",
-            f"{len(df_gizi):,}"
+            "🍽 Total Data Makanan",
+            len(df)
         )
 
     with col2:
         st.metric(
-            "Jumlah Data AKG",
-            f"{len(df_akg):,}"
+            "🔥 Rata-rata Kalori",
+            round(df['energy_kcal'].mean(), 2)
         )
 
     with col3:
         st.metric(
-            "Jumlah Data Rekomendasi",
-            f"{len(df_rekom):,}"
+            "💪 Rata-rata Protein",
+            round(df['protein_g'].mean(), 2)
         )
 
-    st.markdown("---")
+    st.divider()
 
-    # =========================================
-    # INFORMASI SEMUA DATASET
-    # =========================================
-    st.subheader("📋 Informasi Semua Dataset")
+    # CHART INTERAKTIF
+    st.subheader("📊 Distribusi Kalori Makanan")
 
-    info_df = pd.DataFrame({
-        "Dataset": [
-            "Dataset Gizi",
-            "Dataset AKG",
-            "Dataset Rekomendasi"
-        ],
-        "Jumlah Baris": [
-            len(df_gizi),
-            len(df_akg),
-            len(df_rekom)
-        ],
-        "Jumlah Kolom": [
-            df_gizi.shape[1],
-            df_akg.shape[1],
-            df_rekom.shape[1]
-        ]
-    })
-
-    st.dataframe(
-        info_df,
-        use_container_width=True
+    fig = px.histogram(
+        df,
+        x='energy_kcal',
+        nbins=30,
+        title='Distribusi Kandungan Kalori',
+        color_discrete_sequence=['#60A5FA']
     )
 
-    st.markdown("---")
-
-    # =========================================
-    # PREVIEW DATASET GIZI
-    # =========================================
-    st.subheader("🥗 Preview Dataset Gizi")
-
-    st.dataframe(
-        df_gizi.head(10),
-        use_container_width=True
+    fig.update_layout(
+        plot_bgcolor='#111827',
+        paper_bgcolor='#111827',
+        font_color='white'
     )
 
-    st.markdown("---")
+    st.plotly_chart(fig, use_container_width=True)
 
-    # =========================================
-    # PREVIEW DATASET AKG
-    # =========================================
-    st.subheader("🍽️ Preview Dataset AKG")
+    st.success("Sebagian besar makanan memiliki kandungan kalori sedang hingga tinggi.")
 
-    st.dataframe(
-        df_akg.head(10),
-        use_container_width=True
-    )
+# =====================================
+# KANDUNGAN GIZI
+# =====================================
+elif menu == "🥗 Kandungan Gizi Makanan":
 
-    st.markdown("---")
+    st.title("🥗 Kandungan Gizi Makanan")
 
-    # =========================================
-    # PREVIEW DATASET REKOMENDASI
-    # =========================================
-    st.subheader("🩺 Preview Dataset Rekomendasi")
-
-    st.dataframe(
-        df_rekom.head(10),
-        use_container_width=True
-    )
-
-
-# =====================================================
-# PERTANYAAN BISNIS 1
-# =====================================================
-elif menu == "📊 Distribusi Kandungan Gizi Makanan":
-
-    st.header("📊 Distribusi Kandungan Gizi Makanan")
-
-    st.write("""
-    ###
-    Bagaimana distribusi kandungan gizi 
-    (energi, protein, lemak, karbohidrat) 
-    pada makanan dalam database?
-    """)
+    st.write("Analisis kandungan nutrisi pada makanan dalam dataset")
 
     nutrisi = st.selectbox(
         "Pilih Nutrisi",
+        ['energy_kcal', 'protein_g', 'fat_g', 'carbohydrate_g']
+    )
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        fig_bar = px.bar(
+            df.head(15),
+            x=df.head(15).index,
+            y=nutrisi,
+            color=nutrisi,
+            title=f'Top Kandungan {nutrisi}'
+        )
+
+        fig_bar.update_layout(
+            plot_bgcolor='#111827',
+            paper_bgcolor='#111827',
+            font_color='white'
+        )
+
+        st.plotly_chart(fig_bar, use_container_width=True)
+
+    with col2:
+        fig_box = px.box(
+            df,
+            y=nutrisi,
+            title=f'Sebaran {nutrisi}'
+        )
+
+        fig_box.update_layout(
+            plot_bgcolor='#111827',
+            paper_bgcolor='#111827',
+            font_color='white'
+        )
+
+        st.plotly_chart(fig_box, use_container_width=True)
+
+    st.success(f"Analisis menunjukkan distribusi {nutrisi} cukup bervariasi antar makanan.")
+
+# =====================================
+# ANALISIS KEBUTUHAN GIZI
+# =====================================
+elif menu == "📈 Analisis Kebutuhan Gizi":
+
+    st.title("📈 Analisis Kebutuhan Gizi")
+
+    st.write("Hitung estimasi kebutuhan kalori harian pengguna")
+
+    usia = st.slider("Usia", 10, 70, 20)
+    berat = st.slider("Berat Badan (kg)", 30, 120, 55)
+    tinggi = st.slider("Tinggi Badan (cm)", 120, 210, 165)
+
+    aktivitas = st.selectbox(
+        "Tingkat Aktivitas",
         [
-            "energy_kcal",
-            "protein_g",
-            "fat_g",
-            "carbohydrate_g",
-            "sugar_g"
+            "Rendah",
+            "Sedang",
+            "Tinggi"
         ]
     )
 
-    # =========================================
-    # HAPUS NULL
-    # =========================================
-    data_nutrisi = df_gizi[nutrisi].dropna()
+    # SIMULASI PERHITUNGAN
+    bmr = 10 * berat + 6.25 * tinggi - 5 * usia
 
-    # =========================================
-    # METRIK
-    # =========================================
-    mean_val = data_nutrisi.mean()
-    median_val = data_nutrisi.median()
-    std_val = data_nutrisi.std()
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.metric("Mean", f"{mean_val:.4f}")
-
-    with col2:
-        st.metric("Median", f"{median_val:.4f}")
-
-    with col3:
-        st.metric("Std Dev", f"{std_val:.4f}")
-
-    st.markdown("---")
-
-    # =========================================
-    # VISUALISASI
-    # =========================================
-    col1, col2 = st.columns(2)
-
-    # HISTOGRAM
-    with col1:
-
-        fig, ax = plt.subplots(figsize=(8,5))
-
-        sns.histplot(
-            data_nutrisi,
-            kde=True,
-            ax=ax
-        )
-
-        ax.set_title(f"Distribusi {nutrisi}")
-        ax.set_xlabel(nutrisi)
-        ax.set_ylabel("Frekuensi")
-
-        st.pyplot(fig)
-
-    # BOXPLOT
-    with col2:
-
-        fig2, ax2 = plt.subplots(figsize=(8,5))
-
-        sns.boxplot(
-            x=data_nutrisi,
-            ax=ax2
-        )
-
-        ax2.set_title(f"Boxplot {nutrisi}")
-
-        st.pyplot(fig2)
-
-    st.markdown("---")
-
-    st.subheader("📋 Statistik Deskriptif")
-
-    st.dataframe(
-        data_nutrisi.describe(),
-        use_container_width=True
-    )
-
-# =====================================================
-# PERTANYAAN BISNIS 2
-# =====================================================
-elif menu == "🍽️ Pemenuhan Angka Kecukupan Gizi (AKG)":
-
-    st.header("🍽️ Pemenuhan Angka Kecukupan Gizi (AKG)")
-
-    st.write("""
-    ###
-    Apakah asupan kalori harian pengguna 
-    sudah memenuhi AKG?
-    """)
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        target_akg = st.number_input(
-            "Target AKG Harian",
-            min_value=1000,
-            max_value=5000,
-            value=2150
-        )
-
-    with col2:
-        asupan = st.number_input(
-            "Asupan Kalori Harian",
-            min_value=0,
-            max_value=5000,
-            value=1800
-        )
-
-    persen = (asupan / target_akg) * 100
-
-    st.markdown("---")
+    if aktivitas == "Rendah":
+        kebutuhan = bmr * 1.2
+    elif aktivitas == "Sedang":
+        kebutuhan = bmr * 1.5
+    else:
+        kebutuhan = bmr * 1.8
 
     st.metric(
-        "Persentase Pemenuhan AKG",
-        f"{persen:.2f}%"
+        "🔥 Estimasi Kebutuhan Kalori Harian",
+        f"{round(kebutuhan)} kkal"
     )
 
-    st.progress(min(int(persen), 100))
+    fig_gauge = go.Figure(go.Indicator(
+        mode = "gauge+number",
+        value = kebutuhan,
+        title = {'text': "Kebutuhan Kalori"},
+        gauge = {
+            'axis': {'range': [0, 4000]},
+            'bar': {'color': '#60A5FA'}
+        }
+    ))
 
-    fig, ax = plt.subplots(figsize=(7,5))
-
-    kategori = ["Asupan", "AKG"]
-    nilai = [asupan, target_akg]
-
-    sns.barplot(
-        x=kategori,
-        y=nilai,
-        ax=ax
+    fig_gauge.update_layout(
+        paper_bgcolor='#111827',
+        font_color='white'
     )
 
-    ax.set_title("Perbandingan Asupan vs AKG")
-    ax.set_ylabel("Kalori")
+    st.plotly_chart(fig_gauge, use_container_width=True)
 
-    st.pyplot(fig)
+    st.info("Kebutuhan kalori dipengaruhi oleh usia, berat badan, tinggi badan, dan aktivitas.")
 
-# =====================================================
-# PERTANYAAN BISNIS 3
-# =====================================================
-elif menu == "👥 Perbandingan Kebutuhan Gizi":
+# =====================================
+# INSIGHT & REKOMENDASI
+# =====================================
+elif menu == "💡 Insight & Rekomendasi":
 
-    st.header("👥 Perbandingan Kebutuhan Gizi")
+    st.title("💡 Insight & Rekomendasi")
 
-    st.write("""
-    ###
-    Kelompok mana yang memiliki kebutuhan 
-    gizi paling tinggi dan paling rendah?
-    """)
+    st.write("Rekomendasi sederhana berdasarkan data nutrisi")
 
-    numeric_df = df_akg.select_dtypes(include='number')
+    protein_tinggi = df[df['protein_g'] > df['protein_g'].mean()]
 
-    if numeric_df.shape[1] > 0:
-
-        fig, ax = plt.subplots(figsize=(12,6))
-
-        sns.heatmap(
-            numeric_df.corr(),
-            annot=True,
-            cmap="coolwarm",
-            ax=ax
-        )
-
-        ax.set_title("Heatmap Korelasi AKG")
-
-        st.pyplot(fig)
-
-    else:
-        st.warning("Tidak ada kolom numerik di dataset AKG")
-
-    st.markdown("---")
-
-    st.dataframe(
-        df_akg.head(10),
-        use_container_width=True
-    )
-
-# =====================================================
-# PERTANYAAN BISNIS 4
-# =====================================================
-elif menu == "⚖️ Kesenjangan Nutrisi":
-
-    st.header("⚖️ Kesenjangan Nutrisi")
-
-    st.write("""
-    ###
-    Seberapa besar kesenjangan antara 
-    kandungan gizi makanan dengan target AKG?
-    """)
+    kalori_rendah = df[df['energy_kcal'] < df['energy_kcal'].mean()]
 
     col1, col2 = st.columns(2)
 
     with col1:
-        target = st.number_input(
-            "Target Kalori",
-            min_value=1000,
-            max_value=5000,
-            value=2200
-        )
+        st.subheader("💪 Makanan Protein Tinggi")
+        st.dataframe(protein_tinggi.head(10))
 
     with col2:
-        makanan = st.number_input(
-            "Total Kalori Makanan",
-            min_value=0,
-            max_value=5000,
-            value=1500
-        )
+        st.subheader("🥗 Makanan Kalori Rendah")
+        st.dataframe(kalori_rendah.head(10))
 
-    selisih = target - makanan
-    persen = (makanan / target) * 100
+    st.success("""
+    Rekomendasi:
 
-    st.metric(
-        "Selisih Kalori",
-        f"{selisih:.0f} kcal"
-    )
-
-    st.progress(min(int(persen), 100))
-
-    st.write(f"Pemenuhan kebutuhan harian: **{persen:.2f}%**")
-
-# =====================================================
-# PERTANYAAN BISNIS 5
-# =====================================================
-elif menu == "🩺 Pola Hubungan Nutrisi & Kondisi Medis":
-
-    st.header("🩺 Pola Hubungan Nutrisi & Kondisi Medis")
-
-    st.write("""
-    ###
-    Bagaimana hubungan kondisi medis, 
-    aktivitas fisik, dan ketidakseimbangan nutrisi?
+    ✅ Perbanyak makanan tinggi protein
+    ✅ Kurangi makanan tinggi kalori berlebih
+    ✅ Konsumsi nutrisi seimbang setiap hari
     """)
-
-    numeric_df = df_rekom.select_dtypes(include='number')
-
-    if numeric_df.shape[1] > 0:
-
-        fig, ax = plt.subplots(figsize=(12,7))
-
-        sns.heatmap(
-            numeric_df.corr(),
-            annot=True,
-            cmap="viridis",
-            ax=ax
-        )
-
-        ax.set_title("Heatmap Korelasi Nutrisi")
-
-        st.pyplot(fig)
-
-    else:
-        st.warning("Tidak ada kolom numerik pada dataset rekomendasi")
-
-    st.markdown("---")
-
-    st.dataframe(
-        df_rekom.head(10),
-        use_container_width=True
-    )
-
