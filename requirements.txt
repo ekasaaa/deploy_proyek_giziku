@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 streamlit
 pandas
 matplotlib
 seaborn
-=======
-streamlit
-pandas
-matplotlib
-seaborn
->>>>>>> b0ddba81daf0c6b48ca0073888f24673e80558bb
 scikit-learn
