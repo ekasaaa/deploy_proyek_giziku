@@ -245,7 +245,7 @@ elif menu == "🍽️ Kandungan Gizi Makanan":
 
     if data_loaded:
         kolom_gizi = ['Energi (kkal)', 'Protein (g)', 'Lemak (g)', 'Karbohidrat (g)', 'Gula (g)']
-        tab1, tab2, tab3 = st.tabs(["📊 Distribusi", "🏆 Top Makanan", "🔗 Korelasi"])
+        tab1, tab2, tab3, tab4 = st.tabs(["📊 Distribusi", "🏆 Top Makanan", "🔗 Korelasi", "🔍 Cari Makanan"])
 
         with tab1:
             st.markdown("<div class='section-title'>Distribusi Kandungan Gizi</div>", unsafe_allow_html=True)
@@ -257,6 +257,7 @@ elif menu == "🍽️ Kandungan Gizi Makanan":
                                    color_discrete_sequence=[ACCENT])
                 st.plotly_chart(dark_layout(fig), use_container_width=True)
             with col2:
+                # Box plot TANPA outlier (points=False)
                 fig2 = px.box(df_gizi, y=nutrisi, title=f'Sebaran {nutrisi}',
                               color_discrete_sequence=['#818CF8'])
                 st.plotly_chart(dark_layout(fig2), use_container_width=True)
@@ -293,13 +294,15 @@ elif menu == "🍽️ Kandungan Gizi Makanan":
             </div>
             """, unsafe_allow_html=True)
 
-        st.markdown("<div class='section-title'>🔍 Cari & Filter Makanan</div>", unsafe_allow_html=True)
-        search = st.text_input("Cari nama makanan", placeholder="contoh: ayam, nasi, tempe...")
-        if search:
-            hasil = df_gizi[df_gizi['Nama_Makanan'].str.contains(search, case=False, na=False)]
-            st.dataframe(hasil[['Nama_Makanan'] + kolom_gizi].head(20), use_container_width=True)
-        else:
-            st.dataframe(df_gizi[['Nama_Makanan'] + kolom_gizi].head(20), use_container_width=True)
+        with tab4:
+            st.markdown("<div class='section-title'>🔍 Cari & Filter Makanan</div>", unsafe_allow_html=True)
+            st.markdown("<p style='color: #94A3B8;'>💡 Fitur pencarian makanan ada di sini saja untuk kemudahan akses</p>", unsafe_allow_html=True)
+            search = st.text_input("Cari nama makanan", placeholder="contoh: ayam, nasi, tempe...")
+            if search:
+                hasil = df_gizi[df_gizi['Nama_Makanan'].str.contains(search, case=False, na=False)]
+                st.dataframe(hasil[['Nama_Makanan'] + kolom_gizi].head(20), use_container_width=True)
+            else:
+                st.dataframe(df_gizi[['Nama_Makanan'] + kolom_gizi].head(20), use_container_width=True)
 
 # =====================================
 # 📊 ANALISIS PENGGUNA
@@ -399,7 +402,10 @@ elif menu == "📋 Kebutuhan AKG":
     if data_loaded:
         tab1, tab2, tab3 = st.tabs(["📊 Perbandingan", "🌡️ Heatmap", "🔝 Tertinggi & Terendah"])
 
+        # PERBAIKAN: Tambahkan Gula ke kolom_akg jika ada di data
         kolom_akg = ['Energi (kkal)', 'Protein (g)', 'Lemak (g)', 'Karbohidrat (g)']
+        if 'Gula (g)' in df_akg.columns:
+            kolom_akg.append('Gula (g)')
 
         with tab1:
             st.markdown("<div class='section-title'>Perbandingan Kebutuhan Gizi Antar Kategori</div>", unsafe_allow_html=True)
@@ -588,19 +594,26 @@ elif menu == "💡 Rekomendasi Makanan":
                 hide_index=True
             )
 
+            st.markdown("<div class='section-title'>📈 Visualisasi Makanan Rekomendasi</div>", unsafe_allow_html=True)
+            
             col1, col2 = st.columns(2)
             with col1:
-                fig = px.scatter(hasil.head(50), x='Energi (kkal)', y='Protein (g)',
-                                 size='Lemak (g)', hover_name='Nama_Makanan',
-                                 title='Kalori vs Protein (ukuran = Lemak)',
-                                 color_discrete_sequence=[ACCENT])
+                # Scatter: Protein vs Karbohidrat dengan ukuran Energi
+                fig = px.scatter(hasil.head(50), x='Protein (g)', y='Karbohidrat (g)',
+                                 size='Energi (kkal)', hover_name='Nama_Makanan',
+                                 color='Lemak (g)',
+                                 title='Protein vs Karbohidrat (ukuran = Energi, warna = Lemak)',
+                                 color_continuous_scale='Blues')
                 st.plotly_chart(dark_layout(fig), use_container_width=True)
             with col2:
-                top_protein = hasil.nlargest(10, 'Protein (g)')[['Nama_Makanan','Protein (g)']]
-                fig2 = px.bar(top_protein, x='Protein (g)', y='Nama_Makanan',
-                              orientation='h', title='Top 10 Protein Tertinggi dari Hasil Filter',
-                              color='Protein (g)', color_continuous_scale='Blues')
-                fig2.update_layout(yaxis={'categoryorder':'total ascending'})
+                # Bar chart: Perbandingan makro nutrisi top makanan
+                top_makanan = hasil.nlargest(8, 'Protein (g)')[['Nama_Makanan','Protein (g)', 'Lemak (g)', 'Karbohidrat (g)']].head(8)
+                fig2 = px.bar(top_makanan, x='Nama_Makanan', 
+                             y=['Protein (g)', 'Lemak (g)', 'Karbohidrat (g)'],
+                             barmode='group',
+                             title='Perbandingan Makronutrien - Top 8 Makanan',
+                             color_discrete_sequence=['#38BDF8', '#818CF8', '#34D399'])
+                fig2.update_xaxes(tickangle=45)
                 st.plotly_chart(dark_layout(fig2), use_container_width=True)
         else:
             st.warning("😕 Tidak ada makanan yang sesuai filter. Coba longgarkan filternya!")
