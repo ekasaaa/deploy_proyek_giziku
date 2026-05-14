@@ -158,11 +158,6 @@ with st.sidebar:
         if st.sidebar.button(opt, use_container_width=True):
             st.session_state.menu = opt
 
-    st.divider()
-    if data_loaded:
-        st.success("✅ Data berhasil dimuat")
-        st.caption(f"📦 {len(df_gizi)} makanan | 👤 {len(df_rek)} pengguna")
-
 menu = st.session_state.menu
 
 # =====================================
@@ -257,7 +252,7 @@ elif menu == "🍽️ Kandungan Gizi Makanan":
                                    color_discrete_sequence=[ACCENT])
                 st.plotly_chart(dark_layout(fig), use_container_width=True)
             with col2:
-                
+
                 Q1 = df_gizi[nutrisi].quantile(0.25)
                 Q3 = df_gizi[nutrisi].quantile(0.75)
                 IQR = Q3 - Q1
