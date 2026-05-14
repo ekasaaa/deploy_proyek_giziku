@@ -257,9 +257,11 @@ elif menu == "🍽️ Kandungan Gizi Makanan":
                                    color_discrete_sequence=[ACCENT])
                 st.plotly_chart(dark_layout(fig), use_container_width=True)
             with col2:
+
                 # Box plot TANPA outlier (points=False)
                 fig2 = px.box(df_gizi, y=nutrisi, title=f'Sebaran {nutrisi}',
-                              color_discrete_sequence=['#818CF8'])
+                            color_discrete_sequence=['#818CF8'],
+                            points=False)  # ← TAMBAHKAN INI
                 st.plotly_chart(dark_layout(fig2), use_container_width=True)
 
             st.markdown(f"""
