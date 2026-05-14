@@ -257,11 +257,18 @@ elif menu == "🍽️ Kandungan Gizi Makanan":
                                    color_discrete_sequence=[ACCENT])
                 st.plotly_chart(dark_layout(fig), use_container_width=True)
             with col2:
-
-                # Box plot TANPA outlier (points=False)
-                fig2 = px.box(df_gizi, y=nutrisi, title=f'Sebaran {nutrisi}',
+                
+                Q1 = df_gizi[nutrisi].quantile(0.25)
+                Q3 = df_gizi[nutrisi].quantile(0.75)
+                IQR = Q3 - Q1
+                df_no_outlier = df_gizi[
+                    (df_gizi[nutrisi] >= Q1 - 1.5 * IQR) &
+                    (df_gizi[nutrisi] <= Q3 + 1.5 * IQR)
+                ]
+                fig2 = px.box(df_no_outlier, y=nutrisi,
+                            title=f'Sebaran {nutrisi} (tanpa outlier)',
                             color_discrete_sequence=['#818CF8'],
-                            points=False)  # ← TAMBAHKAN INI
+                            points=False)
                 st.plotly_chart(dark_layout(fig2), use_container_width=True)
 
             st.markdown(f"""
