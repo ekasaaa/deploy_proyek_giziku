@@ -27,8 +27,8 @@ st.markdown("""
     background-color: #0F172A;
 }
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #1E3A5F 0%, #162B45 100%);
-    border-right: 1px solid #2D4A6A;
+    background: linear-gradient(180deg, #0D7C6E 0%, #0A5F57 100%);
+    border-right: 1px solid #14B8A6;
 }
 [data-testid="stSidebar"] * { color: white !important; }
 
@@ -36,8 +36,8 @@ h1, h2, h3, h4, h5, h6 { color: white !important; }
 p, label, div, span { color: #CBD5E1 !important; }
 
 .metric-card {
-    background: linear-gradient(135deg, #1E293B 0%, #1A3352 100%);
-    border: 1px solid #2D4A6A;
+    background: linear-gradient(135deg, #0D5C52 0%, #0A4A43 100%);
+    border: 1px solid #14B8A6;
     border-radius: 16px;
     padding: 20px;
     text-align: center;
@@ -47,7 +47,7 @@ p, label, div, span { color: #CBD5E1 !important; }
 .metric-value {
     font-size: 2rem;
     font-weight: 800;
-    color: #38BDF8 !important;
+    color: #06B6D4 !important;
 }
 .metric-label {
     font-size: 0.85rem;
@@ -59,14 +59,14 @@ p, label, div, span { color: #CBD5E1 !important; }
     font-size: 1.3rem;
     font-weight: 700;
     color: white !important;
-    border-left: 4px solid #38BDF8;
+    border-left: 4px solid #10B981;
     padding-left: 12px;
     margin: 24px 0 16px 0;
 }
 
 .insight-box {
-    background: linear-gradient(135deg, #0F3460 0%, #16213E 100%);
-    border: 1px solid #38BDF8;
+    background: linear-gradient(135deg, #0D5C52 0%, #0A4A43 100%);
+    border: 1px solid #14B8A6;
     border-radius: 12px;
     padding: 16px 20px;
     margin: 12px 0;
@@ -74,7 +74,7 @@ p, label, div, span { color: #CBD5E1 !important; }
 .insight-box p { color: #E2E8F0 !important; margin: 0; }
 
 .stButton > button {
-    background: linear-gradient(135deg, #1E40AF, #1D4ED8) !important;
+    background: linear-gradient(135deg, #059669, #10B981) !important;
     color: white !important;
     border: none !important;
     border-radius: 10px !important;
@@ -82,10 +82,9 @@ p, label, div, span { color: #CBD5E1 !important; }
     transition: all 0.3s !important;
 }
 .stButton > button:hover {
-    background: linear-gradient(135deg, #2563EB, #3B82F6) !important;
+    background: linear-gradient(135deg, #10B981, #34D399) !important;
     transform: translateY(-2px) !important;
-    box-shadow: 0 4px 15px rgba(59,130,246,0.4) !important;
-}
+    box-shadow: 0 4px 15px rgba(16,185,129,0.4) !important;
 
 div[data-testid="stSelectbox"] label,
 div[data-testid="stSlider"] label,
@@ -96,8 +95,8 @@ div[data-testid="stRadio"] label { color: #CBD5E1 !important; }
     font-weight: 600 !important;
 }
 .stTabs [aria-selected="true"] {
-    color: #38BDF8 !important;
-    border-bottom-color: #38BDF8 !important;
+    color: #10B981 !important;
+    border-bottom-color: #10B981 !important;
 }
 
 .stDataFrame { border-radius: 12px; overflow: hidden; }
@@ -166,8 +165,8 @@ menu = st.session_state.menu
 # HELPER: PLOT LAYOUT
 # =====================================
 DARK_BG = '#0F172A'
-CARD_BG = '#1E293B'
-ACCENT = '#38BDF8'
+CARD_BG = '#1A3A3A'
+ACCENT = '#06B6D4'
 
 def dark_layout(fig, title=""):
     fig.update_layout(
