@@ -93,18 +93,6 @@ div[data-testid="stSlider"] label { color: #1E293B !important; }
 div[data-testid="stRadio"] label { color: #1E293B !important; }
 div[data-testid="stTextInput"] label { color: #1E293B !important; }
             
-/* bulatan radio */
-div[data-testid="stRadio"] div[role="radiogroup"] label div:first-child {
-    background-color: white !important;
-    border: 2px solid #10B981 !important;
-}
-
-/* radio terpilih */
-div[data-testid="stRadio"] input:checked + div {
-    background-color: #10B981 !important;
-    border-color: #10B981 !important;
-}
-            
 .stSelectbox > div > div { color: #1E293B !important; }
 .stSlider > div > div { color: #1E293B !important; }
             
@@ -154,7 +142,7 @@ div[data-baseweb="input"] > div { background-color: #FFFFFF !important; }
 div[data-baseweb="input"] input { background-color: #FFFFFF !important; color: #1E293B !important; }
 
 /* ========================= */
-/* DATAFRAME FULL PUTIH */
+/* DATAFRAME PUTIH */
 /* ========================= */
 
 [data-testid="stDataFrame"] {
@@ -164,10 +152,9 @@ div[data-baseweb="input"] input { background-color: #FFFFFF !important; color: #
     overflow: hidden !important;
 }
 
-/* semua isi dataframe */
-[data-testid="stDataFrame"] * {
+/* container utama */
+[data-testid="stDataFrameResizable"] {
     background-color: white !important;
-    color: #1E293B !important;
 }
 
 /* header tabel */
@@ -177,19 +164,29 @@ div[data-baseweb="input"] input { background-color: #FFFFFF !important; color: #
     font-weight: 700 !important;
 }
 
-/* row hover */
+/* isi tabel */
+[data-testid="stDataFrame"] td {
+    background-color: white !important;
+    color: #1E293B !important;
+}
+
+/* hover row */
 [data-testid="stDataFrame"] tr:hover td {
     background-color: #F0FDFA !important;
 }
 
-/* scroll area */
+/* scrollbar area */
 [data-testid="stDataFrame"] section {
     background-color: white !important;
 }
 
-/* Slider warna teal */
-[data-testid="stSlider"] [role="slider"] { background-color: #0D9488 !important; }
-            
+/* ========================= */
+/* SLIDER */
+/* ========================= */
+
+[data-testid="stSlider"] [role="slider"] {
+    background-color: #0D9488 !important;
+}
 /* Dropdown popup/popover putih */
 [data-baseweb="popover"] * { background-color: #FFFFFF !important; color: #1E293B !important; }
 ul[role="listbox"] { background-color: #FFFFFF !important; }
