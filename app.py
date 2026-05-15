@@ -159,9 +159,6 @@ with st.sidebar:
             st.session_state.menu = opt
 
     st.divider()
-    if data_loaded:
-        st.success("✅ Data berhasil dimuat")
-        st.caption(f"📦 {len(df_gizi)} makanan | 👤 {len(df_rek)} pengguna")
 
 menu = st.session_state.menu
 
@@ -522,7 +519,6 @@ elif menu == "🧮 Kalkulator Gizi":
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=tdee,
-            title={'text': "Kebutuhan Kalori (kkal)", 'font': {'color': 'white'}},
             gauge={
                 'axis': {'range': [1000, 4000], 'tickcolor': 'white'},
                 'bar': {'color': ACCENT},
@@ -534,8 +530,9 @@ elif menu == "🧮 Kalkulator Gizi":
             },
             number={'font': {'color': 'white'}}
         ))
-        fig.update_layout(paper_bgcolor=CARD_BG, font_color='white', height=280,
-                          margin=dict(t=40, b=0))
+        fig.update_layout(paper_bgcolor=CARD_BG, font_color='white', height=300,
+                          margin=dict(t=80, b=20, l=20, r=20))
+        st.markdown("**🔥 Kebutuhan Kalori Harian (kkal)**", unsafe_allow_html=True)
         st.plotly_chart(fig, use_container_width=True)
 
     # Breakdown makronutrien
