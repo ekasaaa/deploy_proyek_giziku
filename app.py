@@ -146,6 +146,19 @@ div[data-baseweb="input"] input { background-color: #FFFFFF !important; color: #
 
 /* Slider warna teal */
 [data-testid="stSlider"] [role="slider"] { background-color: #0D9488 !important; }
+            
+/* Dropdown popup/popover putih */
+[data-baseweb="popover"] * { background-color: #FFFFFF !important; color: #1E293B !important; }
+ul[role="listbox"] { background-color: #FFFFFF !important; }
+ul[role="listbox"] li { background-color: #FFFFFF !important; color: #1E293B !important; }
+li[role="option"] { background-color: #FFFFFF !important; color: #1E293B !important; }
+li[role="option"]:hover { background-color: #CCFBF1 !important; }
+
+/* Dataframe putih */
+[data-testid="stDataFrame"] > div { background-color: #FFFFFF !important; }
+.dvn-scroller { background-color: #FFFFFF !important; }
+.cell-wrapper { color: #1E293B !important; }
+canvas { filter: invert(0) !important; }
 </style>
 """, unsafe_allow_html=True)
 
