@@ -54,7 +54,7 @@ p, label, div, span { color: #1E293B !important; }
 .metric-label {
     font-size: 0.85rem;
     color: #0D5C52 !important;  ← Dark jadi terlihat
-    margin-top: 4px;
+    margin-top: 4px; 
 }
 
 .section-title {
@@ -67,13 +67,13 @@ p, label, div, span { color: #1E293B !important; }
 }
 
 .insight-box {
-    background: linear-gradient(135deg, #0D5C52 0%, #0A4A43 100%);
-    border: 1px solid #14B8A6;
+    background: linear-gradient(135deg, #C1EDE9 0%, #D1F2EB 100%);
+    border: 1px solid #8EDDD9;
     border-radius: 12px;
     padding: 16px 20px;
     margin: 12px 0;
 }
-.insight-box p { color: #E2E8F0 !important; margin: 0; }
+.insight-box p { color: #0D5C52 !important; margin: 0; }
 
 .stButton > button {
     background: linear-gradient(135deg, #059669, #10B981) !important;
@@ -167,7 +167,7 @@ menu = st.session_state.menu
 # HELPER: PLOT LAYOUT
 # =====================================
 DARK_BG = '#0F172A'
-CARD_BG = '#1A3A3A'
+CARD_BG = '#E8F7F5'
 ACCENT = '#06B6D4'
 
 def dark_layout(fig, title=""):
