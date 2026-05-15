@@ -115,9 +115,9 @@ header[data-testid="stHeader"] {
     height: 0px;
 }
 div[data-testid="stToolbar"] {
-    visibility: hidden;
-    height: 0%;
-    position: fixed;
+    visibility: visible !important;
+    height: auto !important;
+    position: static !important;
 }
 .block-container {
     padding-top: 1rem !important;
