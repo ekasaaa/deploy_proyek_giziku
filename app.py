@@ -154,11 +154,6 @@ ul[role="listbox"] li { background-color: #FFFFFF !important; color: #1E293B !im
 li[role="option"] { background-color: #FFFFFF !important; color: #1E293B !important; }
 li[role="option"]:hover { background-color: #CCFBF1 !important; }
 
-/* Dataframe putih */
-[data-testid="stDataFrame"] > div { background-color: #FFFFFF !important; }
-.dvn-scroller { background-color: #FFFFFF !important; }
-.cell-wrapper { color: #1E293B !important; }
-canvas { filter: invert(0) !important; }
 </style>
 """, unsafe_allow_html=True)
 
