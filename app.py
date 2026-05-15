@@ -109,6 +109,28 @@ div[data-testid="stTextInput"] label { color: #1E293B !important; }
             
 input::placeholder { color: #64748B !important; }
 textarea::placeholder { color: #64748B !important; }
+            
+header[data-testid="stHeader"] {
+    background: transparent;
+    height: 0px;
+}
+div[data-testid="stToolbar"] {
+    visibility: hidden;
+    height: 0%;
+    position: fixed;
+}
+.block-container {
+    padding-top: 1rem !important;
+    padding-bottom: 0rem !important;
+    margin-top: 0rem !important;
+}
+[data-testid="stAppViewContainer"] {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+section[data-testid="stSidebar"] > div {
+    padding-top: 0rem !important;
+}
 
 </style>
 """, unsafe_allow_html=True)
