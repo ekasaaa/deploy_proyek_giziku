@@ -121,7 +121,7 @@ div[data-testid="stToolbar"] {
 }
 .block-container {
     padding-top: 1rem !important;
-    padding-bottom: 0rem !important;
+    padding-bottom: 3rem !important;
     margin-top: 0rem !important;
 }
 [data-testid="stAppViewContainer"] {
