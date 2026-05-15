@@ -142,50 +142,51 @@ div[data-baseweb="input"] > div { background-color: #FFFFFF !important; }
 div[data-baseweb="input"] input { background-color: #FFFFFF !important; color: #1E293B !important; }
 
 /* ========================= */
-/* DATAFRAME PUTIH */
+/* STREAMLIT DATAFRAME WHITE */
 /* ========================= */
 
+/* background utama dataframe */
 [data-testid="stDataFrame"] {
-    background-color: white !important;
-    border: 1px solid #D1D5DB !important;
+    background: white !important;
     border-radius: 12px !important;
+    border: 1px solid #D1D5DB !important;
     overflow: hidden !important;
 }
 
-/* container utama */
-[data-testid="stDataFrameResizable"] {
+/* canvas/grid internal */
+.glideDataEditor {
     background-color: white !important;
+    color: #1E293B !important;
 }
 
-/* header tabel */
-[data-testid="stDataFrame"] th {
+/* viewport tabel */
+.glideDataEditor div {
+    background-color: white !important;
+    color: #1E293B !important;
+}
+
+/* header */
+.glideDataEditor .gdg-header {
     background-color: #CCFBF1 !important;
     color: #065F46 !important;
     font-weight: 700 !important;
 }
 
-/* isi tabel */
-[data-testid="stDataFrame"] td {
+/* sel tabel */
+.glideDataEditor .gdg-cell {
     background-color: white !important;
     color: #1E293B !important;
 }
 
-/* hover row */
-[data-testid="stDataFrame"] tr:hover td {
-    background-color: #F0FDFA !important;
+/* scrollbar */
+.glideDataEditor::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
 
-/* scrollbar area */
-[data-testid="stDataFrame"] section {
-    background-color: white !important;
-}
-
-/* ========================= */
-/* SLIDER */
-/* ========================= */
-
-[data-testid="stSlider"] [role="slider"] {
-    background-color: #0D9488 !important;
+.glideDataEditor::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 10px;
 }
 /* Dropdown popup/popover putih */
 [data-baseweb="popover"] * { background-color: #FFFFFF !important; color: #1E293B !important; }
