@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6 { color: ##1E293B !important; }
 p, label, div, span { color: #1E293B !important; }
 
 .metric-card {
-    background: linear-gradient(135deg, #C1EDE9 0%, #D1F2EB 100%);  ← Lebih terang!
+    background: linear-gradient(135deg, #C1EDE9 0%, #D1F2EB 100%); 
     border: 1px solid #8EDDD9;
     border-radius: 16px;
     padding: 20px;
@@ -49,11 +49,11 @@ p, label, div, span { color: #1E293B !important; }
 .metric-value {
     font-size: 2rem;
     font-weight: 800;
-    color: #0D5C52 !important;  ← Dark teal, tetap nyata
+    color: #0D5C52 !important;
 }
 .metric-label {
     font-size: 0.85rem;
-    color: #0D5C52 !important;  ← Dark jadi terlihat
+    color: #0D5C52 !important;
     margin-top: 4px; 
 }
 
@@ -87,11 +87,15 @@ p, label, div, span { color: #1E293B !important; }
     background: linear-gradient(135deg, #10B981, #34D399) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 4px 15px rgba(16,185,129,0.4) !important;
-
-div[data-testid="stSelectbox"] label,
-div[data-testid="stSlider"] label,
-div[data-testid="stRadio"] label { color: #CBD5E1 !important; }
-
+}
+div[data-testid="stSelectbox"] label { color: #1E293B !important; }
+div[data-testid="stSlider"] label { color: #1E293B !important; }
+div[data-testid="stRadio"] label { color: #1E293B !important; }
+div[data-testid="stTextInput"] label { color: #1E293B !important; }
+            
+.stSelectbox > div > div { color: #1E293B !important; }
+.stSlider > div > div { color: #1E293B !important; }
+            
 .stTabs [data-baseweb="tab"] {
     color: #94A3B8 !important;
     font-weight: 600 !important;
@@ -102,8 +106,15 @@ div[data-testid="stRadio"] label { color: #CBD5E1 !important; }
 }
 
 .stDataFrame { border-radius: 12px; overflow: hidden; }
+            
+input::placeholder { color: #64748B !important; }
+textarea::placeholder { color: #64748B !important; }
+
 </style>
 """, unsafe_allow_html=True)
+
+
+
 
 # =====================================
 # LOAD DATA
