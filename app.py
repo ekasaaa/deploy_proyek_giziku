@@ -24,7 +24,7 @@ st.markdown("""
 * { font-family: 'Plus Jakarta Sans', sans-serif; }
 
 [data-testid="stAppViewContainer"] {
-    background-color: #0F172A;
+    background-color: #F0FDFA;
 }
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, #0D7C6E 0%, #0A5F57 100%);
@@ -33,7 +33,7 @@ st.markdown("""
 [data-testid="stSidebar"] * { color: white !important; }
 
 h1, h2, h3, h4, h5, h6 { color: white !important; }
-p, label, div, span { color: #CBD5E1 !important; }
+p, label, div, span { color: #1E293B !important; }
 
 .metric-card {
     background: linear-gradient(135deg, #0D5C52 0%, #0A4A43 100%);
