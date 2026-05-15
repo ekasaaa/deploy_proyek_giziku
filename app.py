@@ -34,7 +34,7 @@ st.markdown("""
 }
 [data-testid="stSidebar"] * { color: white !important; }
 
-h1, h2, h3, h4, h5, h6 { color: ##1E293B !important; }
+h1, h2, h3, h4, h5, h6 { color: #1E293B !important; }
 p, label, div, span { color: #1E293B !important; }
 
 .metric-card {
@@ -60,7 +60,7 @@ p, label, div, span { color: #1E293B !important; }
 .section-title {
     font-size: 1.3rem;
     font-weight: 700;
-    color: white !important;
+    color: #1E293B !important;
     border-left: 4px solid #10B981;
     padding-left: 12px;
     margin: 24px 0 16px 0;
@@ -186,11 +186,24 @@ def dark_layout(fig, title=""):
         title=title,
         plot_bgcolor=CARD_BG,
         paper_bgcolor=CARD_BG,
-        font_color='white',
-        title_font_color='white',
-        legend_font_color='white',
+
+        font_color='#1E293B',
+        title_font_color='#1E293B',
+        legend_font_color='#1E293B',
+
         margin=dict(t=50, l=20, r=20, b=20)
     )
+
+    fig.update_xaxes(
+        tickfont=dict(color='#1E293B'),
+        title_font=dict(color='#1E293B')
+    )
+
+    fig.update_yaxes(
+        tickfont=dict(color='#1E293B'),
+        title_font=dict(color='#1E293B')
+    )
+
     return fig
 
 # =====================================
@@ -540,9 +553,9 @@ elif menu == "🧮 Kalkulator Gizi":
                     {'range': [2500, 4000], 'color': '#162B45'},
                 ]
             },
-            number={'font': {'color': 'white'}}
+            number={'font': {'color': '#1E293B'}}
         ))
-        fig.update_layout(paper_bgcolor=CARD_BG, font_color='white', height=300,
+        fig.update_layout(paper_bgcolor=CARD_BG, font_color='#1E293B', height=300,
                           margin=dict(t=80, b=20, l=20, r=20))
         st.markdown("**🔥 Kebutuhan Kalori Harian (kkal)**", unsafe_allow_html=True)
         st.plotly_chart(fig, use_container_width=True)
