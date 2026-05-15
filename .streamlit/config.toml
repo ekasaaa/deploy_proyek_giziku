@@ -1,7 +1,18 @@
 [theme]
-base="dark"
-primaryColor="#7C3AED"
-backgroundColor="#111827"
-secondaryBackgroundColor="#111827"
-textColor="#F9FAFB"
-font="sans serif"
+primaryColor = "#10B981"
+backgroundColor = "#0F172A"
+secondaryBackgroundColor = "#1A3A3A"
+textColor = "#E2E8F0"
+font = "sans serif"
+
+[client]
+showErrorDetails = true
+toolbarMode = "minimal"
+
+[logger]
+level = "info"
+
+[server]
+headless = true
+port = 8501
+runOnSave = true
