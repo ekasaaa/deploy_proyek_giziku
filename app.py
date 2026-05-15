@@ -158,6 +158,11 @@ with st.sidebar:
         if st.sidebar.button(opt, use_container_width=True):
             st.session_state.menu = opt
 
+    st.divider()
+    if data_loaded:
+        st.success("✅ Data berhasil dimuat")
+        st.caption(f"📦 {len(df_gizi)} makanan | 👤 {len(df_rek)} pengguna")
+
 menu = st.session_state.menu
 
 # =====================================
@@ -216,10 +221,10 @@ if menu == "🏠 Beranda":
             st.plotly_chart(dark_layout(fig), use_container_width=True)
 
         with col2:
+            st.markdown("**Program Diet yang Direkomendasikan**")
             diet_counts = df_rek['Rekomendasi_Diet'].value_counts().reset_index()
             diet_counts.columns = ['Diet', 'Jumlah']
             fig2 = px.pie(diet_counts, names='Diet', values='Jumlah',
-                          title='Distribusi Program Diet Pengguna',
                           color_discrete_sequence=['#38BDF8','#818CF8','#34D399'])
             st.plotly_chart(dark_layout(fig2), use_container_width=True)
 
@@ -235,7 +240,7 @@ if menu == "🏠 Beranda":
 # =====================================
 elif menu == "🍽️ Kandungan Gizi Makanan":
     st.markdown("# 🍽️ Kandungan Gizi Makanan")
-    st.markdown("Eksplorasi distribusi dan perbandingan kandungan gizi makanan dalam database.")
+    st.markdown("Eksplorasi distribusi dan perbandingan kandungan gizi makanan.")
     st.divider()
 
     if data_loaded:
@@ -252,18 +257,9 @@ elif menu == "🍽️ Kandungan Gizi Makanan":
                                    color_discrete_sequence=[ACCENT])
                 st.plotly_chart(dark_layout(fig), use_container_width=True)
             with col2:
-
-                Q1 = df_gizi[nutrisi].quantile(0.25)
-                Q3 = df_gizi[nutrisi].quantile(0.75)
-                IQR = Q3 - Q1
-                df_no_outlier = df_gizi[
-                    (df_gizi[nutrisi] >= Q1 - 1.5 * IQR) &
-                    (df_gizi[nutrisi] <= Q3 + 1.5 * IQR)
-                ]
-                fig2 = px.box(df_no_outlier, y=nutrisi,
-                            title=f'Sebaran {nutrisi} (tanpa outlier)',
-                            color_discrete_sequence=['#818CF8'],
-                            points=False)
+                # Box plot TANPA outlier (points=False)
+                fig2 = px.box(df_gizi, y=nutrisi, title=f'Sebaran {nutrisi}',
+                              color_discrete_sequence=['#818CF8'])
                 st.plotly_chart(dark_layout(fig2), use_container_width=True)
 
             st.markdown(f"""
@@ -380,10 +376,14 @@ elif menu == "📊 Analisis Pengguna":
                              color_discrete_map=colors)
                 st.plotly_chart(dark_layout(fig), use_container_width=True)
             with col2:
-                fig2 = px.scatter(df_rek, x='Glukosa_mg/dL', y='Kolesterol_mg/dL',
-                                  color='Rekomendasi_Diet', size='Indeks_Massa_Tubuh',
-                                  title='Glukosa vs Kolesterol per Diet',
-                                  color_discrete_sequence=['#38BDF8','#818CF8','#34D399'])
+                # Visualisasi bar chart yang lebih jelas
+                diet_health = df_rek.groupby('Rekomendasi_Diet')[['Glukosa_mg/dL', 'Kolesterol_mg/dL']].mean().reset_index()
+                fig2 = px.bar(diet_health, x='Rekomendasi_Diet', 
+                             y=['Glukosa_mg/dL', 'Kolesterol_mg/dL'],
+                             barmode='group',
+                             title='Rata-rata Glukosa & Kolesterol per Program Diet',
+                             color_discrete_sequence=['#38BDF8', '#818CF8'])
+                fig2.update_xaxes(tickangle=0)
                 st.plotly_chart(dark_layout(fig2), use_container_width=True)
 
             tinggi = df_rek[df_rek['Risiko_Kesehatan'] == 'tinggi']
@@ -460,7 +460,7 @@ elif menu == "🧮 Kalkulator Gizi":
     st.markdown("Hitung estimasi kebutuhan kalori harian dan bandingkan dengan AKG.")
     st.divider()
 
-    col1, col2 = st.columns([1, 1])
+    col1, col2 = st.columns([0.95, 1.05])
     with col1:
         st.markdown("<div class='section-title'>Data Diri</div>", unsafe_allow_html=True)
         gender = st.radio("Jenis Kelamin", ["Laki-laki", "Perempuan"], horizontal=True)
@@ -600,24 +600,13 @@ elif menu == "💡 Rekomendasi Makanan":
 
             st.markdown("<div class='section-title'>📈 Visualisasi Makanan Rekomendasi</div>", unsafe_allow_html=True)
             
-            col1, col2 = st.columns(2)
-            with col1:
-                # Scatter: Protein vs Karbohidrat dengan ukuran Energi
-                fig = px.scatter(hasil.head(50), x='Protein (g)', y='Karbohidrat (g)',
-                                 size='Energi (kkal)', hover_name='Nama_Makanan',
-                                 color='Lemak (g)',
-                                 title='Protein vs Karbohidrat (ukuran = Energi, warna = Lemak)',
-                                 color_continuous_scale='Blues')
-                st.plotly_chart(dark_layout(fig), use_container_width=True)
-            with col2:
-                # Bar chart: Perbandingan makro nutrisi top makanan
-                top_makanan = hasil.nlargest(8, 'Protein (g)')[['Nama_Makanan','Protein (g)', 'Lemak (g)', 'Karbohidrat (g)']].head(8)
-                fig2 = px.bar(top_makanan, x='Nama_Makanan', 
-                             y=['Protein (g)', 'Lemak (g)', 'Karbohidrat (g)'],
-                             barmode='group',
-                             title='Perbandingan Makronutrien - Top 8 Makanan',
-                             color_discrete_sequence=['#38BDF8', '#818CF8', '#34D399'])
-                fig2.update_xaxes(tickangle=45)
-                st.plotly_chart(dark_layout(fig2), use_container_width=True)
+            # Bar chart: Perbandingan makro nutrisi top makanan
+            top_makanan = hasil.nlargest(10, 'Protein (g)')[['Nama_Makanan','Protein (g)', 'Lemak (g)', 'Karbohidrat (g)']].head(10)
+            fig2 = px.bar(top_makanan, x='Nama_Makanan', 
+                         y=['Protein (g)', 'Lemak (g)', 'Karbohidrat (g)'],
+                         barmode='group',
+                         color_discrete_sequence=['#38BDF8', '#818CF8', '#34D399'])
+            fig2.update_xaxes(tickangle=45)
+            st.plotly_chart(dark_layout(fig2), use_container_width=True)
         else:
             st.warning("😕 Tidak ada makanan yang sesuai filter. Coba longgarkan filternya!")
