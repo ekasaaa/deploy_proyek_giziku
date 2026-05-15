@@ -132,6 +132,20 @@ section[data-testid="stSidebar"] > div {
     padding-top: 0rem !important;
 }
 
+/* Force semua input/select/dropdown jadi putih */
+div[data-baseweb="select"] > div { background-color: #FFFFFF !important; color: #1E293B !important; }
+div[data-baseweb="menu"] { background-color: #FFFFFF !important; }
+div[data-baseweb="menu"] li { background-color: #FFFFFF !important; color: #1E293B !important; }
+div[data-baseweb="tag"] { background-color: #0D9488 !important; }
+div[data-baseweb="tag"] span { color: white !important; }
+div[data-baseweb="input"] > div { background-color: #FFFFFF !important; }
+div[data-baseweb="input"] input { background-color: #FFFFFF !important; color: #1E293B !important; }
+
+/* Dataframe putih */
+[data-testid="stDataFrame"] iframe { background: white !important; }
+
+/* Slider warna teal */
+[data-testid="stSlider"] [role="slider"] { background-color: #0D9488 !important; }
 </style>
 """, unsafe_allow_html=True)
 
