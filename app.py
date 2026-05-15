@@ -93,6 +93,18 @@ div[data-testid="stSlider"] label { color: #1E293B !important; }
 div[data-testid="stRadio"] label { color: #1E293B !important; }
 div[data-testid="stTextInput"] label { color: #1E293B !important; }
             
+/* bulatan radio */
+div[data-testid="stRadio"] div[role="radiogroup"] label div:first-child {
+    background-color: white !important;
+    border: 2px solid #10B981 !important;
+}
+
+/* radio terpilih */
+div[data-testid="stRadio"] input:checked + div {
+    background-color: #10B981 !important;
+    border-color: #10B981 !important;
+}
+            
 .stSelectbox > div > div { color: #1E293B !important; }
 .stSlider > div > div { color: #1E293B !important; }
             
@@ -141,8 +153,39 @@ div[data-baseweb="tag"] span { color: white !important; }
 div[data-baseweb="input"] > div { background-color: #FFFFFF !important; }
 div[data-baseweb="input"] input { background-color: #FFFFFF !important; color: #1E293B !important; }
 
-/* Dataframe putih */
-[data-testid="stDataFrame"] iframe { background: white !important; }
+/* ========================= */
+/* DATAFRAME FULL PUTIH */
+/* ========================= */
+
+[data-testid="stDataFrame"] {
+    background-color: white !important;
+    border: 1px solid #D1D5DB !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+}
+
+/* semua isi dataframe */
+[data-testid="stDataFrame"] * {
+    background-color: white !important;
+    color: #1E293B !important;
+}
+
+/* header tabel */
+[data-testid="stDataFrame"] th {
+    background-color: #CCFBF1 !important;
+    color: #065F46 !important;
+    font-weight: 700 !important;
+}
+
+/* row hover */
+[data-testid="stDataFrame"] tr:hover td {
+    background-color: #F0FDFA !important;
+}
+
+/* scroll area */
+[data-testid="stDataFrame"] section {
+    background-color: white !important;
+}
 
 /* Slider warna teal */
 [data-testid="stSlider"] [role="slider"] { background-color: #0D9488 !important; }
