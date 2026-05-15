@@ -25,6 +25,8 @@ st.markdown("""
 
 [data-testid="stAppViewContainer"] {
     background-color: #F0FDFA;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
 }
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, #0D7C6E 0%, #0A5F57 100%);
@@ -32,12 +34,12 @@ st.markdown("""
 }
 [data-testid="stSidebar"] * { color: white !important; }
 
-h1, h2, h3, h4, h5, h6 { color: white !important; }
+h1, h2, h3, h4, h5, h6 { color: ##1E293B !important; }
 p, label, div, span { color: #1E293B !important; }
 
 .metric-card {
-    background: linear-gradient(135deg, #0D5C52 0%, #0A4A43 100%);
-    border: 1px solid #14B8A6;
+    background: linear-gradient(135deg, #C1EDE9 0%, #D1F2EB 100%);  ← Lebih terang!
+    border: 1px solid #8EDDD9;
     border-radius: 16px;
     padding: 20px;
     text-align: center;
@@ -47,11 +49,11 @@ p, label, div, span { color: #1E293B !important; }
 .metric-value {
     font-size: 2rem;
     font-weight: 800;
-    color: #06B6D4 !important;
+    color: #0D5C52 !important;  ← Dark teal, tetap nyata
 }
 .metric-label {
     font-size: 0.85rem;
-    color: #94A3B8 !important;
+    color: #0D5C52 !important;  ← Dark jadi terlihat
     margin-top: 4px;
 }
 
